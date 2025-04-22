@@ -242,7 +242,7 @@ class EcgParam {
     _n = 256;
     _sfecg = 256;
     _sf = 512;
-    _anoise = 0.01;  //  0.1;
+    _anoise = 0.05;  //  0.1;
     _hrmean = 60.0;
     _hrstd = 1.0;
     _seed = 1;

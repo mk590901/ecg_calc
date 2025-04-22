@@ -480,7 +480,9 @@ class EcgCalc {
     hrfact = sqrt(paramOb.getHrMean() / 60);
     hrfact2 = sqrt(hrfact);
 
-    for (i = 1; i <= 5; i++) bi[i] = paramOb.getB(i - 1) * hrfact;
+    for (i = 1; i <= 5; i++) {
+      bi[i] = paramOb.getB(i - 1) * hrfact;
+    }
 
     ti[1] *= hrfact2;
     ti[2] *= hrfact;
@@ -624,15 +626,14 @@ class EcgCalc {
 
     File file = File(outfile);
     IOSink sink = file.openWrite();
-    // for (i = 0; i < nts; i++) {
-    //   sink.write('${(i) * tstep} ${zts[i]} ${ipeak[i].toInt()}\n');
-    //   //sink.write('${zts[i]} \n');
-    // }
-
-    for (i = 0; i < 3000; i++) {
-      int value = (zts[i]*1000).toInt();
-      sink.write('$value, ');
+    for (i = 0; i < nts; i++) {
+      sink.write('${(i) * tstep} ${zts[i]} ${ipeak[i].toInt()}\n');
     }
+
+    // for (i = 0; i < 5000; i++) {
+    //   int value = (zts[i]*1000).toInt();
+    //   sink.write('$value, ');
+    // }
 
     sink.close();
 
