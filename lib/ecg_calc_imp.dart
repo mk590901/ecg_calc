@@ -615,7 +615,7 @@ class EcgCalc {
       timev += h;
     }
 
-    /* Downsample to ECG sampling frequency */
+    /* Down sample to ECG sampling frequency */
     xts = List<double>.filled(nt + 1, 0.0);
     yts = List<double>.filled(nt + 1, 0.0);
     zts = List<double>.filled(nt + 1, 0.0);
