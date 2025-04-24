@@ -1,9 +1,9 @@
 import 'ieee_remainder.dart';
 
 class EcgParam {
-  /****************************************************************
-   *  GLOBAL ECG PARAMETERS:
-   ****************************************************************/
+  //////////////////////////////////////////////////////////////////
+  //  GLOBAL ECG PARAMETERS:
+  //////////////////////////////////////////////////////////////////
   late int _n; // Number of heart beats
   late double _hrstd; // Heart rate std
   late double _hrmean; // Heart rate mean
@@ -33,14 +33,16 @@ class EcgParam {
   // Flag to know if all parameters are valid
   late bool _allParametersValid;
 
-  /** Creates a new instance of EcgParam */
+  //////////////////////////////////////////////////////////////////
+  // Creates a new instance of EcgParam
+  //////////////////////////////////////////////////////////////////
   EcgParam() {
     resetParameters();
   }
 
-  /****************************************************************
-   *  GLOBAL Set/Get Parameter Functions:
-   ****************************************************************/
+  //////////////////////////////////////////////////////////////////
+  // GLOBAL Set/Get Parameter Functions:
+  //////////////////////////////////////////////////////////////////
   void setN(int value) {
     _n = value;
     _allParametersValid = false;
@@ -204,10 +206,9 @@ class EcgParam {
     return _ecgAnimateInterval;
   }
 
-  /****************************************************************
-   *  Functions:
-   ****************************************************************/
-
+  //////////////////////////////////////////////////////////////////
+  // Functions:
+  //////////////////////////////////////////////////////////////////
   /*
    * Check to see if all parameters are valid
    */
@@ -224,7 +225,6 @@ class EcgParam {
     _allParametersValid = true;
 
     // Check the Internal frequency respect to ECG frequency
-    //if ((_sf % _sfecg) != 0) {
     if (ieeeRemainder(_sf.toDouble(), _sfecg.toDouble()).toInt() != 0){
     retValue = false;
       _allParametersValid = false;
