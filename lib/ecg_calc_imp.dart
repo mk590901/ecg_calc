@@ -7,7 +7,7 @@ import 'ieee_remainder.dart';
 class EcgCalc {
 
   final String outfile = "ecgsyn.dat";
-  /** Creates a new instance of EcgCalc */
+  //  Creates a new instance of EcgCalc
   EcgCalc(EcgParam parameters, EcgLogWindow logOb) {
     paramOb = parameters;
     ecgLog = logOb;
@@ -58,9 +58,9 @@ class EcgCalc {
   static const double EPS = 1.2e-7;
   static const double RNMX = (1.0 - EPS);
 
-  /*****************************************************************************
-   *    DEFINE PARAMETERS AS GLOBAL VARIABLES                                 *
-   *****************************************************************************/
+  ///////////////////////////////////////////////////////////////////////////////
+  //  DEFINE PARAMETERS AS GLOBAL VARIABLES
+  ///////////////////////////////////////////////////////////////////////////////
   // Order of extrema: [P Q R S T]
   List<double> ti = List<double>.filled(6, 0.0); // ti converted in radians
   List<double> ai = List<double>.filled(6, 0.0); // new calculated a
@@ -205,7 +205,9 @@ class EcgCalc {
     double add, mean, diff, total;
 
     add = 0.0;
-    for (j = 1; j <= n; j++) add += x[j];
+    for (j = 1; j <= n; j++) {
+      add += x[j];
+    }
 
     mean = add / n;
 
@@ -230,7 +232,7 @@ class EcgCalc {
   /*--------------------------------------------------------------------------*/
   void derivspqrst(double t0, List<double> x, List<double> dxdt) {
     int i, k;
-    double a0, w0, r0, x0, y0, z0;
+    double a0, w0, r0, x0, y0;
     double t, dt, dt2, zbase;
     List<double> xi = List<double>.filled(6, 0.0);
     List<double> yi = List<double>.filled(6, 0.0);
@@ -240,11 +242,14 @@ class EcgCalc {
     r0 = 1.0;
     x0 = 0.0;
     y0 = 0.0;
-    z0 = 0.0;
     a0 = 1.0 - sqrt((x[1] - x0) * (x[1] - x0) + (x[2] - y0) * (x[2] - y0)) / r0;
 
-    for (i = 1; i <= k; i++) xi[i] = cos(ti[i]);
-    for (i = 1; i <= k; i++) yi[i] = sin(ti[i]);
+    for (i = 1; i <= k; i++) {
+      xi[i] = cos(ti[i]);
+    }
+    for (i = 1; i <= k; i++) {
+      yi[i] = sin(ti[i]);
+    }
 
     zbase = 0.005 * sin(2.0 * PI * paramOb.getFHi() * t0);
 
@@ -277,10 +282,14 @@ class EcgCalc {
     xh = x + hh;
 
     derivspqrst(x, y, dydx);
-    for (i = 1; i <= n; i++) yt[i] = y[i] + hh * dydx[i];
+    for (i = 1; i <= n; i++) {
+      yt[i] = y[i] + hh * dydx[i];
+    }
 
     derivspqrst(xh, yt, dyt);
-    for (i = 1; i <= n; i++) yt[i] = y[i] + hh * dyt[i];
+    for (i = 1; i <= n; i++) {
+      yt[i] = y[i] + hh * dyt[i];
+    }
 
     derivspqrst(xh, yt, dym);
     for (i = 1; i <= n; i++) {
@@ -289,14 +298,16 @@ class EcgCalc {
     }
 
     derivspqrst(x + h, yt, dyt);
-    for (i = 1; i <= n; i++) yout[i] = y[i] + h6 * (dydx[i] + dyt[i] + 2.0 * dym[i]);
+    for (i = 1; i <= n; i++) {
+      yout[i] = y[i] + h6 * (dydx[i] + dyt[i] + 2.0 * dym[i]);
+    }
   }
 
   /*
    * GENERATE RR PROCESS
    */
   void rrprocess(List<double> rr, double flo, double fhi, double flostd, double fhistd, double lfhfratio, double hrmean, double hrstd, double sf, int n) {
-    int i, j;
+    int i;
     double c1, c2, w1, w2, sig1, sig2, rrmean, rrstd, xstd, ratio;
     double df;
     List<double> w = List<double>.filled(n + 1, 0.0);
@@ -316,42 +327,64 @@ class EcgCalc {
     rrstd = 60.0 * hrstd / (hrmean * hrmean);
 
     df = sf / n;
-    for (i = 1; i <= n; i++) w[i] = (i - 1) * 2.0 * PI * df;
+    for (i = 1; i <= n; i++) {
+      w[i] = (i - 1) * 2.0 * PI * df;
+    }
 
     for (i = 1; i <= n; i++) {
       hw[i] = (sig1 * exp(-0.5 * pow(w[i] - w1, 2) / pow(c1, 2)) / sqrt(2 * PI * c1 * c1)) + (sig2 * exp(-0.5 * pow(w[i] - w2, 2) / pow(c2, 2)) / sqrt(2 * PI * c2 * c2));
     }
 
-    for (i = 1; i <= n ~/ 2; i++) sw[i] = (sf / 2.0) * sqrt(hw[i]);
+    for (i = 1; i <= n ~/ 2; i++) {
+      sw[i] = (sf / 2.0) * sqrt(hw[i]);
+    }
 
-    for (i = n ~/ 2 + 1; i <= n; i++) sw[i] = (sf / 2.0) * sqrt(hw[n - i + 1]);
+    for (i = n ~/ 2 + 1; i <= n; i++) {
+      sw[i] = (sf / 2.0) * sqrt(hw[n - i + 1]);
+    }
 
     // Randomize the phases
-    for (i = 1; i <= n ~/ 2 - 1; i++) ph0[i] = 2.0 * PI * ran1();
+    for (i = 1; i <= n ~/ 2 - 1; i++) {
+      ph0[i] = 2.0 * PI * ran1();
+    }
 
     ph[1] = 0.0;
-    for (i = 1; i <= n ~/ 2 - 1; i++) ph[i + 1] = ph0[i];
+    for (i = 1; i <= n ~/ 2 - 1; i++) {
+      ph[i + 1] = ph0[i];
+    }
 
     ph[n ~/ 2 + 1] = 0.0;
-    for (i = 1; i <= n ~/ 2 - 1; i++) ph[n - i + 1] = -ph0[i];
+    for (i = 1; i <= n ~/ 2 - 1; i++) {
+      ph[n - i + 1] = -ph0[i];
+    }
 
     // Make complex spectrum
-    for (i = 1; i <= n; i++) swC[2 * i - 1] = sw[i] * cos(ph[i]);
+    for (i = 1; i <= n; i++) {
+      swC[2 * i - 1] = sw[i] * cos(ph[i]);
+    }
 
-    for (i = 1; i <= n; i++) swC[2 * i] = sw[i] * sin(ph[i]);
+    for (i = 1; i <= n; i++) {
+      swC[2 * i] = sw[i] * sin(ph[i]);
+    }
 
     // Calculate inverse fft
     ifft(swC, n, -1);
 
     // Extract real part
-    for (i = 1; i <= n; i++) rr[i] = (1.0 / n) * swC[2 * i - 1];
+    for (i = 1; i <= n; i++) {
+      rr[i] = (1.0 / n) * swC[2 * i - 1];
+    }
 
     xstd = stdev(rr, n);
     ratio = rrstd / xstd;
 
-    for (i = 1; i <= n; i++) rr[i] *= ratio;
+    for (i = 1; i <= n; i++) {
+      rr[i] *= ratio;
+    }
 
-    for (i = 1; i <= n; i++) rr[i] += rrmean;
+    for (i = 1; i <= n; i++) {
+      rr[i] += rrmean;
+    }
   }
 
   /*
@@ -368,7 +401,9 @@ class EcgCalc {
     thetap4 = ti[4];
     thetap5 = ti[5];
 
-    for (i = 1; i <= n; i++) ipeak[i] = 0.0;
+    for (i = 1; i <= n; i++) {
+      ipeak[i] = 0.0;
+    }
 
     theta1 = atan2(y[1], x[1]);
 
@@ -378,38 +413,43 @@ class EcgCalc {
       if ((theta1 <= thetap1) && (thetap1 <= theta2)) {
         d1 = thetap1 - theta1;
         d2 = theta2 - thetap1;
-        if (d1 < d2)
+        if (d1 < d2) {
           ipeak[i] = 1.0;
-        else
+        } else {
           ipeak[i + 1] = 1.0;
+        }
       } else if ((theta1 <= thetap2) && (thetap2 <= theta2)) {
         d1 = thetap2 - theta1;
         d2 = theta2 - thetap2;
-        if (d1 < d2)
+        if (d1 < d2) {
           ipeak[i] = 2.0;
-        else
+        } else {
           ipeak[i + 1] = 2.0;
+        }
       } else if ((theta1 <= thetap3) && (thetap3 <= theta2)) {
         d1 = thetap3 - theta1;
         d2 = theta2 - thetap3;
-        if (d1 < d2)
+        if (d1 < d2) {
           ipeak[i] = 3.0;
-        else
+        } else {
           ipeak[i + 1] = 3.0;
+        }
       } else if ((theta1 <= thetap4) && (thetap4 <= theta2)) {
         d1 = thetap4 - theta1;
         d2 = theta2 - thetap4;
-        if (d1 < d2)
+        if (d1 < d2) {
           ipeak[i] = 4.0;
-        else
+        } else {
           ipeak[i + 1] = 4.0;
+        }
       } else if ((theta1 <= thetap5) && (thetap5 <= theta2)) {
         d1 = thetap5 - theta1;
         d2 = theta2 - thetap5;
-        if (d1 < d2)
+        if (d1 < d2) {
           ipeak[i] = 5.0;
-        else
+        } else {
           ipeak[i + 1] = 5.0;
+        }
       }
       theta1 = theta2;
     }
@@ -493,37 +533,37 @@ class EcgCalc {
     /* Declare state vector */
     x = List<double>.filled(4, 0.0);
 
-    ecgLog.println("Approximate number of heart beats: " + paramOb.getN().toString());
-    ecgLog.println("ECG sampling frequency: " + paramOb.getSfEcg().toString() + " Hertz");
-    ecgLog.println("Internal sampling frequency: " + paramOb.getSf().toString() + " Hertz");
-    ecgLog.println("Amplitude of additive uniformly distributed noise: " + paramOb.getANoise().toString() + " mV");
-    ecgLog.println("Heart rate mean: " + paramOb.getHrMean().toString() + " beats per minute");
-    ecgLog.println("Heart rate std: " + paramOb.getHrStd().toString() + " beats per minute");
-    ecgLog.println("Low frequency: " + paramOb.getFLo().toString() + " Hertz");
-    ecgLog.println("High frequency std: " + paramOb.getFHiStd().toString() + " Hertz");
-    ecgLog.println("Low frequency std: " + paramOb.getFLoStd().toString() + " Hertz");
-    ecgLog.println("High frequency: " + paramOb.getFHi().toString() + " Hertz");
-    ecgLog.println("LF/HF ratio: " + paramOb.getLfHfRatio().toString());
-    ecgLog.println("time step milliseconds: " + paramOb.getEcgAnimateInterval().toString() + "\n");
+    ecgLog.println("Approximate number of heart beats: ${paramOb.getN()}");
+    ecgLog.println("ECG sampling frequency: ${paramOb.getSfEcg()} Hertz");
+    ecgLog.println("Internal sampling frequency: ${paramOb.getSf()} Hertz");
+    ecgLog.println("Amplitude of additive uniformly distributed noise: ${paramOb.getANoise()} mV");
+    ecgLog.println("Heart rate mean: ${paramOb.getHrMean()} beats per minute");
+    ecgLog.println("Heart rate std: ${paramOb.getHrStd()} beats per minute");
+    ecgLog.println("Low frequency: ${paramOb.getFLo()} Hertz");
+    ecgLog.println("High frequency std: ${paramOb.getFHiStd()} Hertz");
+    ecgLog.println("Low frequency std: ${paramOb.getFLoStd()} Hertz");
+    ecgLog.println("High frequency: ${paramOb.getFHi()} Hertz");
+    ecgLog.println("LF/HF ratio: ${paramOb.getLfHfRatio()}");
+    ecgLog.println("time step milliseconds: ${paramOb.getEcgAnimateInterval()}\n");
     ecgLog.println("Order of Extrema:");
     ecgLog.println("      theta(radians)");
-    ecgLog.println("P: [" + ti[1].toString() + "\t]");
-    ecgLog.println("Q: [" + ti[2].toString() + "\t]");
-    ecgLog.println("R: [" + ti[3].toString() + "\t]");
-    ecgLog.println("S: [" + ti[4].toString() + "\t]");
-    ecgLog.println("T: [" + ti[5].toString() + "\t]\n");
+    ecgLog.println("P: [${ti[1]}\t]");
+    ecgLog.println("Q: [${ti[2]}\t]");
+    ecgLog.println("R: [${ti[3]}\t]");
+    ecgLog.println("S: [${ti[4]}\t]");
+    ecgLog.println("T: [${ti[5]}\t]\n");
     ecgLog.println("      a(calculated)");
-    ecgLog.println("P: [" + ai[1].toString() + "\t]");
-    ecgLog.println("Q: [" + ai[2].toString() + "\t]");
-    ecgLog.println("R: [" + ai[3].toString() + "\t]");
-    ecgLog.println("S: [" + ai[4].toString() + "\t]");
-    ecgLog.println("T: [" + ai[5].toString() + "\t]\n");
+    ecgLog.println("P: [${ai[1]}\t]");
+    ecgLog.println("Q: [${ai[2]}\t]");
+    ecgLog.println("R: [${ai[3]}\t]");
+    ecgLog.println("S: [${ai[4]}\t]");
+    ecgLog.println("T: [${ai[5]}\t]\n");
     ecgLog.println("      b(calculated)");
-    ecgLog.println("P: [" + bi[1].toString() + "\t]");
-    ecgLog.println("Q: [" + bi[2].toString() + "\t]");
-    ecgLog.println("R: [" + bi[3].toString() + "\t]");
-    ecgLog.println("S: [" + bi[4].toString() + "\t]");
-    ecgLog.println("T: [" + bi[5].toString() + "\t]\n");
+    ecgLog.println("P: [${bi[1]}\t]");
+    ecgLog.println("Q: [${bi[2]}\t]");
+    ecgLog.println("R: [${bi[3]}\t]");
+    ecgLog.println("S: [${bi[4]}\t]");
+    ecgLog.println("T: [${bi[5]}\t]\n");
 
     /* Initialize the vector */
     x[1] = xinitial;
@@ -541,7 +581,7 @@ class EcgCalc {
     rrmean = (60.0 / paramOb.getHrMean());
     nrr = pow(2.0, (log(paramOb.getN() * rrmean * paramOb.getSf()) / log(2.0)).ceil()).toInt();
 
-    ecgLog.println("Using " + nrr.toString() + " = 2^ " + (log(1.0 * nrr) / log(2.0)).round().toString() + " samples for calculating RR intervals");
+    ecgLog.println("Using $nrr = 2^ ${(log(1.0 * nrr) / log(2.0)).round()} samples for calculating RR intervals");
 
     /* Create rrprocess with required spectrum */
     rr = List<double>.filled(nrr + 1, 0.0);
@@ -555,7 +595,9 @@ class EcgCalc {
     while (i <= nrr) {
       tecg += rr[j];
       j = (tecg / h).round();
-      for (k = i; k <= j; k++) rrpc[k] = rr[i];
+      for (k = i; k <= j; k++) {
+        rrpc[k] = rr[i];
+      }
       i = j + 1;
     }
     nt = j;
@@ -595,15 +637,19 @@ class EcgCalc {
     zmin = zts[1];
     zmax = zts[1];
     for (i = 2; i <= nts; i++) {
-      if (zts[i] < zmin)
+      if (zts[i] < zmin) {
         zmin = zts[i];
-      else if (zts[i] > zmax) zmax = zts[i];
+      } else if (zts[i] > zmax) zmax = zts[i];
     }
     zrange = zmax - zmin;
-    for (i = 1; i <= nts; i++) zts[i] = (zts[i] - zmin) * (1.6) / zrange - 0.4;
+    for (i = 1; i <= nts; i++) {
+      zts[i] = (zts[i] - zmin) * (1.6) / zrange - 0.4;
+    }
 
     /* Include additive uniformly distributed measurement noise */
-    for (i = 1; i <= nts; i++) zts[i] += paramOb.getANoise() * (2.0 * ran1() - 1.0);
+    for (i = 1; i <= nts; i++) {
+      zts[i] += paramOb.getANoise() * (2.0 * ran1() - 1.0);
+    }
 
     /*
      * Insert into the ECG data table
