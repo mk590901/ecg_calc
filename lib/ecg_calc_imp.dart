@@ -625,15 +625,11 @@ class EcgCalc {
     print ('ecgResultNumRows->$ecgResultNumRows');
 
     File file = File(outfile);
+
     IOSink sink = file.openWrite();
     for (i = 0; i < nts; i++) {
       sink.write('${(i) * tstep} ${zts[i]} ${ipeak[i].toInt()}\n');
     }
-
-    // for (i = 0; i < 5000; i++) {
-    //   int value = (zts[i]*1000).toInt();
-    //   sink.write('$value, ');
-    // }
 
     sink.close();
 
@@ -642,27 +638,4 @@ class EcgCalc {
     return retValue;
   }
 }
-
-// Placeholder classes for EcgParam and EcgLogWindow
-// class EcgParam {
-//   int getN() => 0;
-//   double getHrStd() => 0.0;
-//   double getHrMean() => 0.0;
-//   double getLfHfRatio() => 0.0;
-//   int getSfEcg() => 0;
-//   int getSf() => 0;
-//   double getAmplitude() => 0.0;
-//   int getSeed() => 0;
-//   double getANoise() => 0.0;
-//   int getPeriod() => 0;
-//   double getFLo() => 0.0;
-//   double getFHi() => 0.0;
-//   double getFLoStd() => 0.0;
-//   double getFHiStd() => 0.0;
-//   double getTheta(int index) => 0.0;
-//   double getA(int index) => 0.0;
-//   double getB(int index) => 0.0;
-//   int getEcgAnimateInterval() => 0;
-// }
-
 
