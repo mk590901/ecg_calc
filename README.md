@@ -8,6 +8,6 @@ The source code in __C__ is available on the __PhysioNet__ platform as an archiv
 The __ecgsyn.c__ file is the main source of the code, which can be found in the __C__ directory inside the archive. Additional files __dfour1.c__ and __ran1.c__from _Numerical Recipes in C_ are required for compilation, which aren't included in the archive.
 
 ## Notes
-* Those who wish can follow the link https://www.physionet.org/content/ecgsyn/1.0.0/ and get information about the package __ECGSYN__ first-hand.
-* Also, for those who want to refresh their knowledge in the field of computational mathematics, a pdf copy of the above-mentioned book __"Numerical Recipes in C"__ is attached to the project.
+>Those who wish can follow the link https://www.physionet.org/content/ecgsyn/1.0.0/ and get information about the package __ECGSYN__ first-hand.
+>Also, for those who want to refresh their knowledge in the field of computational mathematics, a pdf copy of the above-mentioned book __"Numerical Recipes in C"__ is attached to the project.
 
