@@ -26,4 +26,10 @@ __ecg_calc__ is a console __dart__ application that generates a text file ecgsyn
 * ECG voltage value in millivolts (mV), corresponding to the signal amplitude at each point.
 * ECG signal peaks
   
-__The file contains a fixed number of lines: 64K__.
+__The file contains a fixed number of lines: ~64K__ (65772).
+
+## Trace
+
+[ecg_calc.webm](https://github.com/user-attachments/assets/9a752c63-a892-44f6-9536-4184402e7097)
+
+
